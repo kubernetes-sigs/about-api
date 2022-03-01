@@ -1,0 +1,16 @@
+domain: k8s.io
+layout:
+- go.kubebuilder.io/v3
+projectName: clusterproperty
+repo: k8s.io/clusterproperty
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: k8s.io
+  group: about
+  kind: ClusterProperty
+  path: k8s.io/clusterproperty/api/v1
+  version: v1
+version: "3"
