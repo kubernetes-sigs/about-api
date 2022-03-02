@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1
+package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,8 +28,8 @@ type ClusterPropertySpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// ClusterProperty Name is "id.k8s.io"
-	Name string `json:"name"`
+	// ClusterProperty Name
+	Name string `json:"name,omitempty"`
 
 	// ClusterProperty value
 	// +kubebuilder:validation:Maxlength=128
@@ -45,6 +45,7 @@ type ClusterPropertyStatus struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:resource:scope=Cluster
 
 // ClusterProperty is the Schema for the clusterproperties API
 type ClusterProperty struct {

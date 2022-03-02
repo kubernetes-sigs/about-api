@@ -11,6 +11,6 @@ resources:
   domain: k8s.io
   group: about
   kind: ClusterProperty
-  path: k8s.io/clusterproperty/api/v1
-  version: v1
+  path: k8s.io/clusterproperty/api/v1alpha1
+  version: v1alpha1
 version: "3"

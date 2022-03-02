@@ -31,7 +31,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	aboutv1 "k8s.io/clusterproperty/api/v1"
+	aboutv1alpha1 "k8s.io/clusterproperty/api/v1alpha1"
 	"k8s.io/clusterproperty/controllers"
 	//+kubebuilder:scaffold:imports
 )
@@ -44,7 +44,7 @@ var (
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
-	utilruntime.Must(aboutv1.AddToScheme(scheme))
+	utilruntime.Must(aboutv1alpha1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 

@@ -24,7 +24,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	aboutv1 "k8s.io/clusterproperty/api/v1"
+	aboutv1alpha1 "k8s.io/clusterproperty/api/v1alpha1"
 )
 
 // ClusterPropertyReconciler reconciles a ClusterProperty object
@@ -57,6 +57,6 @@ func (r *ClusterPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 // SetupWithManager sets up the controller with the Manager.
 func (r *ClusterPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&aboutv1.ClusterProperty{}).
+		For(&aboutv1alpha1.ClusterProperty{}).
 		Complete(r)
 }
