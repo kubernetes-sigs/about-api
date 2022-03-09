@@ -32,7 +32,7 @@ type ClusterPropertySpec struct {
 	Name string `json:"name,omitempty"`
 
 	// ClusterProperty value
-	// +kubebuilder:validation:Maxlength=128
+	// +kubebuilder:validation:Maxlength=128000
 	// +kubebuilder:validation:MinLength=1
 	Value string `json:"value"`
 }
