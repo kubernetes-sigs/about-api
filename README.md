@@ -13,3 +13,12 @@ You can reach the maintainers of this project at:
 ### Code of conduct
 
 Participation in the Kubernetes community is governed by the [Kubernetes Code of Conduct](code-of-conduct.md).
+
+
+### How to run tests 
+
+In order to run tests you would need access to either a miniKube or kubernetes cluster.
+Set the environment variable `TEST_USE_EXISTING_CLUSTER` to `true`
+
+export TEST_USE_EXISTING_CLUSTER=true
+go test ./...
