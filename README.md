@@ -15,7 +15,7 @@ You can reach the maintainers of this project at:
 Participation in the Kubernetes community is governed by the [Kubernetes Code of Conduct](code-of-conduct.md).
 
 
-### How to Run controller on the CLuster
+### Run controller on the Cluster.
 
 In order to build and run tests you would need access to an existing miniKube or kubernetes cluster.
 Set the environment variable `TEST_USE_EXISTING_CLUSTER` to `true`
@@ -31,7 +31,7 @@ Deploy the controller to the cluster with image specified by IMG:
 make deploy IMG=<some-registry>/<project-name>:tag
 
 
-### How to run tests 
+### Run tests.
 
 In order to run tests you would need access to an existing miniKube or kubernetes cluster.
 Set the environment variable `TEST_USE_EXISTING_CLUSTER` to `true`
