@@ -15,7 +15,14 @@ spec:
     singular: clusterproperty
   scope: Cluster
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .spec.value
+      name: value
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: age
+      type: date
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: ClusterProperty is the Schema for the clusterproperties API

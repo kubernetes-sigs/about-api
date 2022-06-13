@@ -48,6 +48,8 @@ type ClusterPropertyStatus struct {
 //+kubebuilder:resource:scope=Cluster
 
 // ClusterProperty is the Schema for the clusterproperties API
+// +kubebuilder:printcolumn:name="value",type=string,JSONPath=`.spec.value`
+// +kubebuilder:printcolumn:name="age",type=date,JSONPath=`.metadata.creationTimestamp`
 type ClusterProperty struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
