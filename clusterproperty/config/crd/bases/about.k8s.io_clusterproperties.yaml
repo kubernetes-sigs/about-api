@@ -42,9 +42,6 @@ spec:
           spec:
             description: ClusterPropertySpec defines the desired state of ClusterProperty
             properties:
-              name:
-                description: ClusterProperty Name
-                type: string
               value:
                 description: ClusterProperty value
                 minLength: 1
