@@ -28,9 +28,6 @@ type ClusterPropertySpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// ClusterProperty Name
-	Name string `json:"name,omitempty"`
-
 	// ClusterProperty value
 	// +kubebuilder:validation:Maxlength=128000
 	// +kubebuilder:validation:MinLength=1
