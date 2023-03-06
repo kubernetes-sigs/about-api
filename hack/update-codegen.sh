@@ -14,6 +14,10 @@ GO111MODULE=on go install "k8s.io/code-generator/cmd/client-gen"
 GO111MODULE=on go install "k8s.io/code-generator/cmd/lister-gen"
 GO111MODULE=on go install "k8s.io/code-generator/cmd/informer-gen"
 
+# set GOPATH environment variables for commands(register-gen,client-gen,lister-gen,informer-gen).
+# Otherwise the generated files will be output to './' if $GOPATH is not set.
+export GOPATH=$(go env GOPATH | awk -F ':' '{print $1}')
+
 echo "Generating deep copy files with controller-gen"
 controller-gen object:headerFile="hack/boilerplate/boilerplate.generatego.txt" paths="./pkg/apis/v1alpha1/..."
 
