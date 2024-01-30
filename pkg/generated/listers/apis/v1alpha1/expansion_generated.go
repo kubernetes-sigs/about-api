@@ -21,7 +21,3 @@ package v1alpha1
 // ClusterPropertyListerExpansion allows custom methods to be added to
 // ClusterPropertyLister.
 type ClusterPropertyListerExpansion interface{}
-
-// ClusterPropertyNamespaceListerExpansion allows custom methods to be added to
-// ClusterPropertyNamespaceLister.
-type ClusterPropertyNamespaceListerExpansion interface{}

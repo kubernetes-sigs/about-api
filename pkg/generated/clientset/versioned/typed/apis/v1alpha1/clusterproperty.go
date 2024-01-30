@@ -33,7 +33,7 @@ import (
 // ClusterPropertiesGetter has a method to return a ClusterPropertyInterface.
 // A group's client should implement this interface.
 type ClusterPropertiesGetter interface {
-	ClusterProperties(namespace string) ClusterPropertyInterface
+	ClusterProperties() ClusterPropertyInterface
 }
 
 // ClusterPropertyInterface has methods to work with ClusterProperty resources.
@@ -52,14 +52,12 @@ type ClusterPropertyInterface interface {
 // clusterProperties implements ClusterPropertyInterface
 type clusterProperties struct {
 	client rest.Interface
-	ns     string
 }
 
 // newClusterProperties returns a ClusterProperties
-func newClusterProperties(c *AboutV1alpha1Client, namespace string) *clusterProperties {
+func newClusterProperties(c *AboutV1alpha1Client) *clusterProperties {
 	return &clusterProperties{
 		client: c.RESTClient(),
-		ns:     namespace,
 	}
 }
 
@@ -67,7 +65,6 @@ func newClusterProperties(c *AboutV1alpha1Client, namespace string) *clusterProp
 func (c *clusterProperties) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.ClusterProperty, err error) {
 	result = &v1alpha1.ClusterProperty{}
 	err = c.client.Get().
-		Namespace(c.ns).
 		Resource("clusterproperties").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
@@ -84,7 +81,6 @@ func (c *clusterProperties) List(ctx context.Context, opts v1.ListOptions) (resu
 	}
 	result = &v1alpha1.ClusterPropertyList{}
 	err = c.client.Get().
-		Namespace(c.ns).
 		Resource("clusterproperties").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
@@ -101,7 +97,6 @@ func (c *clusterProperties) Watch(ctx context.Context, opts v1.ListOptions) (wat
 	}
 	opts.Watch = true
 	return c.client.Get().
-		Namespace(c.ns).
 		Resource("clusterproperties").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
@@ -112,7 +107,6 @@ func (c *clusterProperties) Watch(ctx context.Context, opts v1.ListOptions) (wat
 func (c *clusterProperties) Create(ctx context.Context, clusterProperty *v1alpha1.ClusterProperty, opts v1.CreateOptions) (result *v1alpha1.ClusterProperty, err error) {
 	result = &v1alpha1.ClusterProperty{}
 	err = c.client.Post().
-		Namespace(c.ns).
 		Resource("clusterproperties").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(clusterProperty).
@@ -125,7 +119,6 @@ func (c *clusterProperties) Create(ctx context.Context, clusterProperty *v1alpha
 func (c *clusterProperties) Update(ctx context.Context, clusterProperty *v1alpha1.ClusterProperty, opts v1.UpdateOptions) (result *v1alpha1.ClusterProperty, err error) {
 	result = &v1alpha1.ClusterProperty{}
 	err = c.client.Put().
-		Namespace(c.ns).
 		Resource("clusterproperties").
 		Name(clusterProperty.Name).
 		VersionedParams(&opts, scheme.ParameterCodec).
@@ -138,7 +131,6 @@ func (c *clusterProperties) Update(ctx context.Context, clusterProperty *v1alpha
 // Delete takes name of the clusterProperty and deletes it. Returns an error if one occurs.
 func (c *clusterProperties) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	return c.client.Delete().
-		Namespace(c.ns).
 		Resource("clusterproperties").
 		Name(name).
 		Body(&opts).
@@ -153,7 +145,6 @@ func (c *clusterProperties) DeleteCollection(ctx context.Context, opts v1.Delete
 		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
 	}
 	return c.client.Delete().
-		Namespace(c.ns).
 		Resource("clusterproperties").
 		VersionedParams(&listOpts, scheme.ParameterCodec).
 		Timeout(timeout).
@@ -166,7 +157,6 @@ func (c *clusterProperties) DeleteCollection(ctx context.Context, opts v1.Delete
 func (c *clusterProperties) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ClusterProperty, err error) {
 	result = &v1alpha1.ClusterProperty{}
 	err = c.client.Patch(pt).
-		Namespace(c.ns).
 		Resource("clusterproperties").
 		Name(name).
 		SubResource(subresources...).

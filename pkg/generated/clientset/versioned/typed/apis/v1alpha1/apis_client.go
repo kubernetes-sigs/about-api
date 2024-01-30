@@ -36,8 +36,8 @@ type AboutV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *AboutV1alpha1Client) ClusterProperties(namespace string) ClusterPropertyInterface {
-	return newClusterProperties(c, namespace)
+func (c *AboutV1alpha1Client) ClusterProperties() ClusterPropertyInterface {
+	return newClusterProperties(c)
 }
 
 // NewForConfig creates a new AboutV1alpha1Client for the given config.

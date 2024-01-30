@@ -21,6 +21,7 @@ import (
 )
 
 //+genclient
+//+genclient:nonNamespaced
 //+kubebuilder:object:root=true
 //+kubebuilder:resource:scope=Cluster
 //+kubebuilder:printcolumn:name="value",type=string,JSONPath=`.spec.value`

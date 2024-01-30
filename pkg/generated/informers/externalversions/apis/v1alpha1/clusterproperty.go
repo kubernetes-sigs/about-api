@@ -42,33 +42,32 @@ type ClusterPropertyInformer interface {
 type clusterPropertyInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
-	namespace        string
 }
 
 // NewClusterPropertyInformer constructs a new informer for ClusterProperty type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewClusterPropertyInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredClusterPropertyInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewClusterPropertyInformer(client versioned.Interface, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredClusterPropertyInformer(client, resyncPeriod, indexers, nil)
 }
 
 // NewFilteredClusterPropertyInformer constructs a new informer for ClusterProperty type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredClusterPropertyInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredClusterPropertyInformer(client versioned.Interface, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.AboutV1alpha1().ClusterProperties(namespace).List(context.TODO(), options)
+				return client.AboutV1alpha1().ClusterProperties().List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.AboutV1alpha1().ClusterProperties(namespace).Watch(context.TODO(), options)
+				return client.AboutV1alpha1().ClusterProperties().Watch(context.TODO(), options)
 			},
 		},
 		&apisv1alpha1.ClusterProperty{},
@@ -78,7 +77,7 @@ func NewFilteredClusterPropertyInformer(client versioned.Interface, namespace st
 }
 
 func (f *clusterPropertyInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredClusterPropertyInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+	return NewFilteredClusterPropertyInformer(client, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
 func (f *clusterPropertyInformer) Informer() cache.SharedIndexInformer {

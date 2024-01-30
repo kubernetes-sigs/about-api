@@ -41,5 +41,5 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 
 // ClusterProperties returns a ClusterPropertyInformer.
 func (v *version) ClusterProperties() ClusterPropertyInformer {
-	return &clusterPropertyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+	return &clusterPropertyInformer{factory: v.factory, tweakListOptions: v.tweakListOptions}
 }
