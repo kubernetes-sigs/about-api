@@ -28,8 +28,8 @@ type FakeAboutV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeAboutV1alpha1) ClusterProperties(namespace string) v1alpha1.ClusterPropertyInterface {
-	return &FakeClusterProperties{c, namespace}
+func (c *FakeAboutV1alpha1) ClusterProperties() v1alpha1.ClusterPropertyInterface {
+	return &FakeClusterProperties{c}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
