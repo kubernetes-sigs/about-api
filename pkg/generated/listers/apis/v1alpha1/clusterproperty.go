@@ -31,8 +31,9 @@ type ClusterPropertyLister interface {
 	// List lists all ClusterProperties in the indexer.
 	// Objects returned here must be treated as read-only.
 	List(selector labels.Selector) (ret []*v1alpha1.ClusterProperty, err error)
-	// ClusterProperties returns an object that can list and get ClusterProperties.
-	ClusterProperties(namespace string) ClusterPropertyNamespaceLister
+	// Get retrieves the ClusterProperty from the index for a given name.
+	// Objects returned here must be treated as read-only.
+	Get(name string) (*v1alpha1.ClusterProperty, error)
 	ClusterPropertyListerExpansion
 }
 
@@ -54,41 +55,9 @@ func (s *clusterPropertyLister) List(selector labels.Selector) (ret []*v1alpha1.
 	return ret, err
 }
 
-// ClusterProperties returns an object that can list and get ClusterProperties.
-func (s *clusterPropertyLister) ClusterProperties(namespace string) ClusterPropertyNamespaceLister {
-	return clusterPropertyNamespaceLister{indexer: s.indexer, namespace: namespace}
-}
-
-// ClusterPropertyNamespaceLister helps list and get ClusterProperties.
-// All objects returned here must be treated as read-only.
-type ClusterPropertyNamespaceLister interface {
-	// List lists all ClusterProperties in the indexer for a given namespace.
-	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1alpha1.ClusterProperty, err error)
-	// Get retrieves the ClusterProperty from the indexer for a given namespace and name.
-	// Objects returned here must be treated as read-only.
-	Get(name string) (*v1alpha1.ClusterProperty, error)
-	ClusterPropertyNamespaceListerExpansion
-}
-
-// clusterPropertyNamespaceLister implements the ClusterPropertyNamespaceLister
-// interface.
-type clusterPropertyNamespaceLister struct {
-	indexer   cache.Indexer
-	namespace string
-}
-
-// List lists all ClusterProperties in the indexer for a given namespace.
-func (s clusterPropertyNamespaceLister) List(selector labels.Selector) (ret []*v1alpha1.ClusterProperty, err error) {
-	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
-		ret = append(ret, m.(*v1alpha1.ClusterProperty))
-	})
-	return ret, err
-}
-
-// Get retrieves the ClusterProperty from the indexer for a given namespace and name.
-func (s clusterPropertyNamespaceLister) Get(name string) (*v1alpha1.ClusterProperty, error) {
-	obj, exists, err := s.indexer.GetByKey(s.namespace + "/" + name)
+// Get retrieves the ClusterProperty from the index for a given name.
+func (s *clusterPropertyLister) Get(name string) (*v1alpha1.ClusterProperty, error) {
+	obj, exists, err := s.indexer.GetByKey(name)
 	if err != nil {
 		return nil, err
 	}
