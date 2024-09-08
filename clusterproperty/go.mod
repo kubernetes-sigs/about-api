@@ -1,6 +1,6 @@
 module k8s.io/clusterproperty
 
-go 1.23
+go 1.21
 
 require (
 	github.com/onsi/ginkgo v1.16.5
