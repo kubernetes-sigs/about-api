@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha1
+package v1beta1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -47,7 +47,8 @@ type ClusterPropertyStatus struct {
 // ClusterProperty is the Schema for the clusterproperties API
 // +kubebuilder:printcolumn:name="value",type=string,JSONPath=`.spec.value`
 // +kubebuilder:printcolumn:name="age",type=date,JSONPath=`.metadata.creationTimestamp`
-// +versionName=v1alpha1
+// +kubebuilder:storageversion
+// +versionName=v1beta1
 type ClusterProperty struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
