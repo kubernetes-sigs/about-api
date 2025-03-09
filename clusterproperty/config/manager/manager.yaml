@@ -3,6 +3,8 @@ kind: Namespace
 metadata:
   labels:
     control-plane: controller-manager
+    app.kubernetes.io/name: clusterproperty
+    app.kubernetes.io/managed-by: kustomize
   name: system
 ---
 apiVersion: apps/v1
@@ -12,10 +14,13 @@ metadata:
   namespace: system
   labels:
     control-plane: controller-manager
+    app.kubernetes.io/name: clusterproperty
+    app.kubernetes.io/managed-by: kustomize
 spec:
   selector:
     matchLabels:
       control-plane: controller-manager
+      app.kubernetes.io/name: clusterproperty
   replicas: 1
   template:
     metadata:
@@ -23,18 +28,49 @@ spec:
         kubectl.kubernetes.io/default-container: manager
       labels:
         control-plane: controller-manager
+        app.kubernetes.io/name: clusterproperty
     spec:
+      # TODO(user): Uncomment the following code to configure the nodeAffinity expression
+      # according to the platforms which are supported by your solution.
+      # It is considered best practice to support multiple architectures. You can
+      # build your manager image using the makefile target docker-buildx.
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #         - matchExpressions:
+      #           - key: kubernetes.io/arch
+      #             operator: In
+      #             values:
+      #               - amd64
+      #               - arm64
+      #               - ppc64le
+      #               - s390x
+      #           - key: kubernetes.io/os
+      #             operator: In
+      #             values:
+      #               - linux
       securityContext:
+        # Projects are configured by default to adhere to the "restricted" Pod Security Standards.
+        # This ensures that deployments meet the highest security requirements for Kubernetes.
+        # For more details, see: https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted
         runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - command:
         - /manager
         args:
-        - --leader-elect
+          - --leader-elect
+          - --health-probe-bind-address=:8081
         image: controller:latest
         name: manager
+        ports: []
         securityContext:
           allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - "ALL"
         livenessProbe:
           httpGet:
             path: /healthz
@@ -56,5 +92,7 @@ spec:
           requests:
             cpu: 10m
             memory: 64Mi
+        volumeMounts: []
+      volumes: []
       serviceAccountName: controller-manager
       terminationGracePeriodSeconds: 10

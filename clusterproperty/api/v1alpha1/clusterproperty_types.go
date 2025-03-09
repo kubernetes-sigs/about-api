@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Kubernetes Authors.
+Copyright 2025.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,30 +23,25 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// ClusterPropertySpec defines the desired state of ClusterProperty
+// ClusterPropertySpec defines the desired state of ClusterProperty.
 type ClusterPropertySpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// ClusterProperty value
-	// +kubebuilder:validation:Maxlength=128000
-	// +kubebuilder:validation:MinLength=1
-	Value string `json:"value"`
+	// Foo is an example field of ClusterProperty. Edit clusterproperty_types.go to remove/update
+	Foo string `json:"foo,omitempty"`
 }
 
-// ClusterPropertyStatus defines the observed state of ClusterProperty
+// ClusterPropertyStatus defines the observed state of ClusterProperty.
 type ClusterPropertyStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 }
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
-//+kubebuilder:resource:scope=Cluster
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
-// ClusterProperty is the Schema for the clusterproperties API
-// +kubebuilder:printcolumn:name="value",type=string,JSONPath=`.spec.value`
-// +kubebuilder:printcolumn:name="age",type=date,JSONPath=`.metadata.creationTimestamp`
+// ClusterProperty is the Schema for the clusterproperties API.
 type ClusterProperty struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -55,9 +50,9 @@ type ClusterProperty struct {
 	Status ClusterPropertyStatus `json:"status,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
-// ClusterPropertyList contains a list of ClusterProperty
+// ClusterPropertyList contains a list of ClusterProperty.
 type ClusterPropertyList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`

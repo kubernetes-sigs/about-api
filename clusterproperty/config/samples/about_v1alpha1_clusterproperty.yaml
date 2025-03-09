@@ -1,9 +1,9 @@
-# An example object of `id.k8s.io ClusterProperty` 
-# using a kube-system ns uuid as the id value:
-
 apiVersion: about.k8s.io/v1alpha1
 kind: ClusterProperty
 metadata:
-  name: id.k8s.io
+  labels:
+    app.kubernetes.io/name: clusterproperty
+    app.kubernetes.io/managed-by: kustomize
+  name: clusterproperty-sample
 spec:
-  value: 721ab723-13bc-11e5-aec2-42010af0021e
+  # TODO(user): Add fields here
