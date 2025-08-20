@@ -21,20 +21,20 @@ package fake
 import (
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/apis/v1alpha1"
+	v1beta1 "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/apis/v1beta1"
 )
 
-type FakeAboutV1alpha1 struct {
+type FakeAboutV1beta1 struct {
 	*testing.Fake
 }
 
-func (c *FakeAboutV1alpha1) ClusterProperties() v1alpha1.ClusterPropertyInterface {
+func (c *FakeAboutV1beta1) ClusterProperties() v1beta1.ClusterPropertyInterface {
 	return newFakeClusterProperties(c)
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeAboutV1alpha1) RESTClient() rest.Interface {
+func (c *FakeAboutV1beta1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

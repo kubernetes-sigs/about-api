@@ -1,51 +1,34 @@
-#!/usr/bin/env bash
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 set -o errexit
 set -o nounset
 set -o pipefail
 
-# For all commands, the working directory is the parent directory(repo root).
-REPO_ROOT=$(git rev-parse --show-toplevel)
-cd "${REPO_ROOT}"
+set -o errexit
+set -o nounset
+set -o pipefail
 
-GO111MODULE=on go install "sigs.k8s.io/controller-tools/cmd/controller-gen@v0.8.0"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/register-gen"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/client-gen"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/lister-gen"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/informer-gen"
+SCRIPT_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+CODEGEN_PKG=${CODEGEN_PKG:-$(cd "${SCRIPT_ROOT}"; ls -d -1 ./vendor/k8s.io/code-generator 2>/dev/null || echo ../code-generator)}
 
-# set GOPATH environment variables for commands(register-gen,client-gen,lister-gen,informer-gen).
-# Otherwise the generated files will be output to './' if $GOPATH is not set.
-export GOPATH=$(go env GOPATH | awk -F ':' '{print $1}')
+echo $CODEGEN_PKG
 
-echo "Generating deep copy files with controller-gen"
-controller-gen object:headerFile="hack/boilerplate/boilerplate.generatego.txt" paths="./pkg/apis/v1alpha1/..."
+source "${CODEGEN_PKG}/kube_codegen.sh"
 
-echo "Generating with register-gen"
-register-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-dirs=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --output-package=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --output-file-base=zz_generated.register
+THIS_PKG="sigs.k8s.io/about-api"
 
-echo "Generating with client-gen"
-client-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-base="" \
-  --input=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --output-package=sigs.k8s.io/about-api/pkg/generated/clientset \
-  --clientset-name=versioned
+kube::codegen::gen_helpers \
+    --boilerplate "${SCRIPT_ROOT}/hack/boilerplate/boilerplate.generatego.txt" \
+    "${SCRIPT_ROOT}/pkg"
 
-echo "Generating with lister-gen"
-lister-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-dirs=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --output-package=sigs.k8s.io/about-api/pkg/generated/listers
+kube::codegen::gen_register \
+    --boilerplate "${SCRIPT_ROOT}/hack/boilerplate/boilerplate.generatego.txt" \
+    "${SCRIPT_ROOT}/pkg"
 
-echo "Generating with informer-gen"
-informer-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-dirs=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --versioned-clientset-package=sigs.k8s.io/about-api/pkg/generated/clientset/versioned \
-  --listers-package=sigs.k8s.io/about-api/pkg/generated/listers \
-  --output-package=sigs.k8s.io/about-api/pkg/generated/informers
+kube::codegen::gen_client \
+    --with-watch \
+    --output-dir "${SCRIPT_ROOT}/pkg/generated" \
+    --output-pkg "${THIS_PKG}/pkg/generated" \
+    --boilerplate "${SCRIPT_ROOT}/hack/boilerplate/boilerplate.generatego.txt" \
+    "${SCRIPT_ROOT}/pkg"

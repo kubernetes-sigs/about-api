@@ -22,6 +22,7 @@ import (
 
 //+genclient
 //+genclient:nonNamespaced
+//+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
 //+kubebuilder:resource:scope=Cluster
 //+kubebuilder:printcolumn:name="value",type=string,JSONPath=`.spec.value`
@@ -48,6 +49,7 @@ type ClusterPropertySpec struct {
 	Value string `json:"value"`
 }
 
+//+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
 
 // ClusterPropertyList contains a list of ClusterProperty.
