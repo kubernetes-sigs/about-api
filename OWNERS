@@ -4,3 +4,6 @@ approvers:
   - lauralorenz
   - jeremyot
   - pmorie
+
+labels:
+  - sig/multicluster
