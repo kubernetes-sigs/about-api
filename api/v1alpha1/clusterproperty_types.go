@@ -23,7 +23,7 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// ClusterPropertySpec defines the desired state of ClusterProperty
+// ClusterPropertySpec defines the desired state of ClusterProperty.
 type ClusterPropertySpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
@@ -34,7 +34,7 @@ type ClusterPropertySpec struct {
 	Value string `json:"value"`
 }
 
-// ClusterPropertyStatus defines the observed state of ClusterProperty
+// ClusterPropertyStatus defines the observed state of ClusterProperty.
 type ClusterPropertyStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
@@ -44,7 +44,9 @@ type ClusterPropertyStatus struct {
 //+kubebuilder:subresource:status
 //+kubebuilder:resource:scope=Cluster
 
-// ClusterProperty is the Schema for the clusterproperties API
+// ClusterProperty is a resource provides a way to store identification related,
+// cluster scoped information for multi-cluster tools while creating flexibility
+// for implementations.
 // +kubebuilder:printcolumn:name="value",type=string,JSONPath=`.spec.value`
 // +kubebuilder:printcolumn:name="age",type=date,JSONPath=`.metadata.creationTimestamp`
 // +versionName=v1alpha1
@@ -58,7 +60,7 @@ type ClusterProperty struct {
 
 //+kubebuilder:object:root=true
 
-// ClusterPropertyList contains a list of ClusterProperty
+// ClusterPropertyList contains a list of ClusterProperty.
 type ClusterPropertyList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`

@@ -24,7 +24,10 @@ spec:
     name: v1beta1
     schema:
       openAPIV3Schema:
-        description: ClusterProperty is the Schema for the clusterproperties API
+        description: |-
+          ClusterProperty is a resource provides a way to store identification related,
+          cluster scoped information for multi-cluster tools while creating flexibility
+          for implementations.
         properties:
           apiVersion:
             description: |-
@@ -44,7 +47,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ClusterPropertySpec defines the desired state of ClusterProperty
+            description: ClusterPropertySpec defines the desired state of ClusterProperty.
             properties:
               value:
                 description: ClusterProperty value
@@ -54,7 +57,7 @@ spec:
             - value
             type: object
           status:
-            description: ClusterPropertyStatus defines the observed state of ClusterProperty
+            description: ClusterPropertyStatus defines the observed state of ClusterProperty.
             type: object
         type: object
     served: true
