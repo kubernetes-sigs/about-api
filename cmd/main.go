@@ -32,7 +32,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	aboutv1alpha1 "k8s.io/clusterproperty/api/v1alpha1"
-	"k8s.io/clusterproperty/controllers"
+	"k8s.io/clusterproperty/internal/controller"
 	//+kubebuilder:scaffold:imports
 )
 
