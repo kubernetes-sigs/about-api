@@ -64,7 +64,3 @@ type ClusterPropertyList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []ClusterProperty `json:"items"`
 }
-
-func init() {
-	SchemeBuilder.Register(&ClusterProperty{}, &ClusterPropertyList{})
-}
