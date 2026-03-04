@@ -20,9 +20,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // ClusterPropertySpec defines the desired state of ClusterProperty.
 type ClusterPropertySpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
@@ -40,6 +37,8 @@ type ClusterPropertyStatus struct {
 	// Important: Run "make" to regenerate code after modifying this file
 }
 
+//+genclient
+//+genclient:nonNamespaced
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 //+kubebuilder:resource:scope=Cluster
