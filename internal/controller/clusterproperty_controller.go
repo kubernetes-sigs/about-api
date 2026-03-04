@@ -24,7 +24,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	aboutv1alpha1 "k8s.io/clusterproperty/api/v1alpha1"
+	aboutv1beta1 "k8s.io/clusterproperty/api/v1beta1"
 )
 
 // ClusterPropertyReconciler reconciles a ClusterProperty object
@@ -44,7 +44,7 @@ type ClusterPropertyReconciler struct {
 func (r *ClusterPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
-	var clusterProperty aboutv1alpha1.ClusterProperty
+	var clusterProperty aboutv1beta1.ClusterProperty
 
 	// TODO: which CRs in the CRD is watching
 	// Reconcilitation watch the CR with name specifically "id.k8s.io"
@@ -68,6 +68,6 @@ func (r *ClusterPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 // SetupWithManager sets up the controller with the Manager.
 func (r *ClusterPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&aboutv1alpha1.ClusterProperty{}).
+		For(&aboutv1beta1.ClusterProperty{}).
 		Complete(r)
 }
