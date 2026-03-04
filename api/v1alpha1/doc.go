@@ -15,6 +15,6 @@ limitations under the License.
 */
 
 // Package v1alpha1 contains API schema definitions for the ClusterProperty.
-//+kubebuilder:object:generate=true
-//+groupName=about.k8s.io
+// +kubebuilder:object:generate=true
+// +groupName=about.k8s.io
 package v1alpha1
