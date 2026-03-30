@@ -8,44 +8,56 @@ set -o pipefail
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "${REPO_ROOT}"
 
-GO111MODULE=on go install "sigs.k8s.io/controller-tools/cmd/controller-gen@v0.16.5"
 GO111MODULE=on go install "k8s.io/code-generator/cmd/register-gen@v0.29.1"
 GO111MODULE=on go install "k8s.io/code-generator/cmd/client-gen@v0.29.1"
 GO111MODULE=on go install "k8s.io/code-generator/cmd/lister-gen@v0.29.1"
 GO111MODULE=on go install "k8s.io/code-generator/cmd/informer-gen@v0.29.1"
 
-# set GOPATH environment variables for commands(register-gen,client-gen,lister-gen,informer-gen).
-# Otherwise the generated files will be output to './' if $GOPATH is not set.
-export GOPATH=$(go env GOPATH | awk -F ':' '{print $1}')
+# echo "Generating deep copy files with deepcopy-gen"
+deepcopy-gen \
+  -O zz_generated.deepcopy \
+  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
+  --output-base "${REPO_ROOT}" \
+  --output-package "sigs.k8s.io/about-api/" \
+  --input-dirs sigs.k8s.io/about-api/api/v1alpha1 \
+  --input-dirs sigs.k8s.io/about-api/api/v1beta1 \
+  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/"
 
-echo "Generating deep copy files with controller-gen"
-controller-gen object:headerFile="hack/boilerplate/boilerplate.generatego.txt" paths="./api/v1alpha1/..."
-
-echo "Generating with register-gen"
+echo "Generating register files with register-gen"
 register-gen \
+  -O zz_generated.register \
   --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-dirs=api/v1alpha1 \
-  --output-package=api/v1alpha1 \
-  --output-file-base=zz_generated.register
+  --output-base "${REPO_ROOT}" \
+  --output-package "sigs.k8s.io/about-api/" \
+  --input-dirs sigs.k8s.io/about-api/api/v1alpha1 \
+  --input-dirs sigs.k8s.io/about-api/api/v1beta1 \
+  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/"
 
-echo "Generating with client-gen"
+echo "Generating versioned clientsets with client-gen"
 client-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-base="" \
-  --input=api/v1alpha1 \
-  --output-package=generated/clientset \
-  --clientset-name=versioned
+  --go-header-file "hack/boilerplate/boilerplate.generatego.txt" \
+  --clientset-name "versioned" \
+  --input-base "sigs.k8s.io/about-api/" \
+  --input "api/v1alpha1/,api/v1beta1/" \
+  --output-base "${REPO_ROOT}" \
+  --output-package "sigs.k8s.io/about-api/pkg/generated/clientset/" \
+  --input-dirs sigs.k8s.io/about-api/api/v1alpha1,sigs.k8s.io/about-api/api/v1beta1 \
+  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/"
 
-echo "Generating with lister-gen"
+echo "Generating listers with lister-gen"
 lister-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-dirs=api/v1alpha1 \
-  --output-package=generated/listers
+  --go-header-file "hack/boilerplate/boilerplate.generatego.txt" \
+  --output-base "${REPO_ROOT}" \
+  --output-package "sigs.k8s.io/about-api/pkg/generated/listers/" \
+  --input-dirs sigs.k8s.io/about-api/api/v1alpha1,sigs.k8s.io/about-api/api/v1beta1 \
+  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/"
 
-echo "Generating with informer-gen"
+echo "Generating informers with informer-gen"
 informer-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-dirs=api/v1alpha1 \
-  --versioned-clientset-package=generated/clientset/versioned \
-  --listers-package=generated/listers \
-  --output-package=generated/informers
+  --go-header-file "hack/boilerplate/boilerplate.generatego.txt" \
+  --output-base "${REPO_ROOT}" \
+  --output-package "sigs.k8s.io/about-api/pkg/generated/informers/" \
+  --input-dirs sigs.k8s.io/about-api/api/v1alpha1,sigs.k8s.io/about-api/api/v1beta1 \
+  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/" \
+  --versioned-clientset-package sigs.k8s.io/about-api/pkg/generated/clientset/versioned \
+  --listers-package sigs.k8s.io/about-api/pkg/generated/listers

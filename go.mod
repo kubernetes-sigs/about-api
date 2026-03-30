@@ -1,4 +1,4 @@
-module k8s.io/clusterproperty
+module sigs.k8s.io/about-api
 
 go 1.22.0
 
@@ -10,7 +10,6 @@ require (
 	k8s.io/apimachinery v0.29.1
 	k8s.io/client-go v0.29.1
 	k8s.io/code-generator v0.29.0
-	sigs.k8s.io/about-api v0.0.0-20260212043000-8d585a6b38e9
 	sigs.k8s.io/controller-runtime v0.17.0
 )
 
@@ -19,7 +18,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.0 // indirect
-	github.com/evanphx/json-patch v4.12.0+incompatible // indirect
 	github.com/evanphx/json-patch/v5 v5.8.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect

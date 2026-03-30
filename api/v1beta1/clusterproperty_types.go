@@ -40,6 +40,8 @@ type ClusterPropertyStatus struct {
 	// Important: Run "make" to regenerate code after modifying this file
 }
 
+//+genclient
+//+genclient:nonNamespaced
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 //+kubebuilder:resource:scope=Cluster
@@ -51,6 +53,7 @@ type ClusterPropertyStatus struct {
 // +kubebuilder:printcolumn:name="age",type=date,JSONPath=`.metadata.creationTimestamp`
 // +kubebuilder:storageversion
 // +versionName=v1beta1
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type ClusterProperty struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -62,12 +65,9 @@ type ClusterProperty struct {
 //+kubebuilder:object:root=true
 
 // ClusterPropertyList contains a list of ClusterProperty.
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type ClusterPropertyList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []ClusterProperty `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&ClusterProperty{}, &ClusterPropertyList{})
 }

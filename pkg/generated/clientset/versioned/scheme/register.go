@@ -23,34 +23,20 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	aboutv1alpha1 "sigs.k8s.io/about-api/pkg/apis/v1alpha1"
+	about "sigs.k8s.io/about-api/api/v1beta1/install"
 )
 
 var Scheme = runtime.NewScheme()
 var Codecs = serializer.NewCodecFactory(Scheme)
 var ParameterCodec = runtime.NewParameterCodec(Scheme)
-var localSchemeBuilder = runtime.SchemeBuilder{
-	aboutv1alpha1.AddToScheme,
-}
-
-// AddToScheme adds all types of this clientset into the given scheme. This allows composition
-// of clientsets, like in:
-//
-//	import (
-//	  "k8s.io/client-go/kubernetes"
-//	  clientsetscheme "k8s.io/client-go/kubernetes/scheme"
-//	  aggregatorclientsetscheme "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset/scheme"
-//	)
-//
-//	kclientset, _ := kubernetes.NewForConfig(c)
-//	_ = aggregatorclientsetscheme.AddToScheme(clientsetscheme.Scheme)
-//
-// After this, RawExtensions in Kubernetes types will serialize kube-aggregator types
-// correctly.
-var AddToScheme = localSchemeBuilder.AddToScheme
 
 func init() {
 	v1.AddToGroupVersion(Scheme, schema.GroupVersion{Version: "v1"})
-	utilruntime.Must(AddToScheme(Scheme))
+	Install(Scheme)
+}
+
+// Install registers the API group and adds types to a scheme
+func Install(scheme *runtime.Scheme) {
+	about.Install(scheme)
+	about.Install(scheme)
 }

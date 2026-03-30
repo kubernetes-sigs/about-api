@@ -24,7 +24,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	aboutv1beta1 "k8s.io/clusterproperty/api/v1beta1"
+	aboutv1beta1 "sigs.k8s.io/about-api/api/v1beta1"
 )
 
 // ClusterPropertyReconciler reconciles a ClusterProperty object

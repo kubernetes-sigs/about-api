@@ -25,24 +25,31 @@ import (
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
-	aboutv1alpha1 "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/apis/v1alpha1"
+	aboutinternalversion "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/v1alpha1/internalversion"
+	aboutinternalversion "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/v1beta1/internalversion"
 )
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	AboutV1alpha1() aboutv1alpha1.AboutV1alpha1Interface
+	About() aboutinternalversion.AboutInterface
+	About() aboutinternalversion.AboutInterface
 }
 
-// Clientset contains the clients for groups. Each group has exactly one
-// version included in a Clientset.
+// Clientset contains the clients for groups.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	aboutV1alpha1 *aboutv1alpha1.AboutV1alpha1Client
+	about *aboutinternalversion.AboutClient
+	about *aboutinternalversion.AboutClient
 }
 
-// AboutV1alpha1 retrieves the AboutV1alpha1Client
-func (c *Clientset) AboutV1alpha1() aboutv1alpha1.AboutV1alpha1Interface {
-	return c.aboutV1alpha1
+// About retrieves the AboutClient
+func (c *Clientset) About() aboutinternalversion.AboutInterface {
+	return c.about
+}
+
+// About retrieves the AboutClient
+func (c *Clientset) About() aboutinternalversion.AboutInterface {
+	return c.about
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -89,7 +96,11 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 
 	var cs Clientset
 	var err error
-	cs.aboutV1alpha1, err = aboutv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.about, err = aboutinternalversion.NewForConfigAndClient(&configShallowCopy, httpClient)
+	if err != nil {
+		return nil, err
+	}
+	cs.about, err = aboutinternalversion.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +125,8 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.aboutV1alpha1 = aboutv1alpha1.New(c)
+	cs.about = aboutinternalversion.New(c)
+	cs.about = aboutinternalversion.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

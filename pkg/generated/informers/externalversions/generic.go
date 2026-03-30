@@ -23,7 +23,8 @@ import (
 
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
-	v1alpha1 "sigs.k8s.io/about-api/pkg/apis/v1alpha1"
+	v1alpha1 "sigs.k8s.io/about-api/api/v1alpha1"
+	v1beta1 "sigs.k8s.io/about-api/api/v1beta1"
 )
 
 // GenericInformer is type of SharedIndexInformer which will locate and delegate to other
@@ -55,6 +56,10 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 	// Group=about.k8s.io, Version=v1alpha1
 	case v1alpha1.SchemeGroupVersion.WithResource("clusterproperties"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.About().V1alpha1().ClusterProperties().Informer()}, nil
+
+		// Group=about.k8s.io, Version=v1beta1
+	case v1beta1.SchemeGroupVersion.WithResource("clusterproperties"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.About().V1beta1().ClusterProperties().Informer()}, nil
 
 	}
 

@@ -25,8 +25,10 @@ import (
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"
 	clientset "sigs.k8s.io/about-api/pkg/generated/clientset/versioned"
-	aboutv1alpha1 "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/apis/v1alpha1"
-	fakeaboutv1alpha1 "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/apis/v1alpha1/fake"
+	aboutinternalversion "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/v1alpha1/internalversion"
+	fakeaboutinternalversion "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/v1alpha1/internalversion/fake"
+	aboutinternalversion "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/v1beta1/internalversion"
+	fakeaboutinternalversion "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/v1beta1/internalversion/fake"
 )
 
 // NewSimpleClientset returns a clientset that will respond with the provided objects.
@@ -79,7 +81,12 @@ var (
 	_ testing.FakeClient  = &Clientset{}
 )
 
-// AboutV1alpha1 retrieves the AboutV1alpha1Client
-func (c *Clientset) AboutV1alpha1() aboutv1alpha1.AboutV1alpha1Interface {
-	return &fakeaboutv1alpha1.FakeAboutV1alpha1{Fake: &c.Fake}
+// About retrieves the AboutClient
+func (c *Clientset) About() aboutinternalversion.AboutInterface {
+	return &fakeaboutinternalversion.FakeAbout{Fake: &c.Fake}
+}
+
+// About retrieves the AboutClient
+func (c *Clientset) About() aboutinternalversion.AboutInterface {
+	return &fakeaboutinternalversion.FakeAbout{Fake: &c.Fake}
 }

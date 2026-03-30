@@ -26,10 +26,10 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
-	apisv1alpha1 "sigs.k8s.io/about-api/pkg/apis/v1alpha1"
+	apiv1alpha1 "sigs.k8s.io/about-api/api/v1alpha1"
 	versioned "sigs.k8s.io/about-api/pkg/generated/clientset/versioned"
 	internalinterfaces "sigs.k8s.io/about-api/pkg/generated/informers/externalversions/internalinterfaces"
-	v1alpha1 "sigs.k8s.io/about-api/pkg/generated/listers/apis/v1alpha1"
+	v1alpha1 "sigs.k8s.io/about-api/pkg/generated/listers/core/v1alpha1"
 )
 
 // ClusterPropertyInformer provides access to a shared informer and lister for
@@ -70,7 +70,7 @@ func NewFilteredClusterPropertyInformer(client versioned.Interface, resyncPeriod
 				return client.AboutV1alpha1().ClusterProperties().Watch(context.TODO(), options)
 			},
 		},
-		&apisv1alpha1.ClusterProperty{},
+		&apiv1alpha1.ClusterProperty{},
 		resyncPeriod,
 		indexers,
 	)
@@ -81,7 +81,7 @@ func (f *clusterPropertyInformer) defaultInformer(client versioned.Interface, re
 }
 
 func (f *clusterPropertyInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&apisv1alpha1.ClusterProperty{}, f.defaultInformer)
+	return f.factory.InformerFor(&apiv1alpha1.ClusterProperty{}, f.defaultInformer)
 }
 
 func (f *clusterPropertyInformer) Lister() v1alpha1.ClusterPropertyLister {

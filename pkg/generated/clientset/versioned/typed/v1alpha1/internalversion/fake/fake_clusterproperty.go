@@ -23,36 +23,35 @@ import (
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "sigs.k8s.io/about-api/pkg/apis/v1alpha1"
+	v1beta1 "sigs.k8s.io/about-api/api/v1beta1"
 )
 
 // FakeClusterProperties implements ClusterPropertyInterface
 type FakeClusterProperties struct {
-	Fake *FakeAboutV1alpha1
+	Fake *FakeAbout
 }
 
-var clusterpropertiesResource = schema.GroupVersionResource{Group: "about.k8s.io", Version: "v1alpha1", Resource: "clusterproperties"}
+var clusterpropertiesResource = v1beta1.SchemeGroupVersion.WithResource("clusterproperties")
 
-var clusterpropertiesKind = schema.GroupVersionKind{Group: "about.k8s.io", Version: "v1alpha1", Kind: "ClusterProperty"}
+var clusterpropertiesKind = v1beta1.SchemeGroupVersion.WithKind("ClusterProperty")
 
 // Get takes name of the clusterProperty, and returns the corresponding clusterProperty object, and an error if there is any.
-func (c *FakeClusterProperties) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.ClusterProperty, err error) {
+func (c *FakeClusterProperties) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1beta1.ClusterProperty, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewRootGetAction(clusterpropertiesResource, name), &v1alpha1.ClusterProperty{})
+		Invokes(testing.NewRootGetAction(clusterpropertiesResource, name), &v1beta1.ClusterProperty{})
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.ClusterProperty), err
+	return obj.(*v1beta1.ClusterProperty), err
 }
 
 // List takes label and field selectors, and returns the list of ClusterProperties that match those selectors.
-func (c *FakeClusterProperties) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.ClusterPropertyList, err error) {
+func (c *FakeClusterProperties) List(ctx context.Context, opts v1.ListOptions) (result *v1beta1.ClusterPropertyList, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewRootListAction(clusterpropertiesResource, clusterpropertiesKind, opts), &v1alpha1.ClusterPropertyList{})
+		Invokes(testing.NewRootListAction(clusterpropertiesResource, clusterpropertiesKind, opts), &v1beta1.ClusterPropertyList{})
 	if obj == nil {
 		return nil, err
 	}
@@ -61,8 +60,8 @@ func (c *FakeClusterProperties) List(ctx context.Context, opts v1.ListOptions) (
 	if label == nil {
 		label = labels.Everything()
 	}
-	list := &v1alpha1.ClusterPropertyList{ListMeta: obj.(*v1alpha1.ClusterPropertyList).ListMeta}
-	for _, item := range obj.(*v1alpha1.ClusterPropertyList).Items {
+	list := &v1beta1.ClusterPropertyList{ListMeta: obj.(*v1beta1.ClusterPropertyList).ListMeta}
+	for _, item := range obj.(*v1beta1.ClusterPropertyList).Items {
 		if label.Matches(labels.Set(item.Labels)) {
 			list.Items = append(list.Items, item)
 		}
@@ -77,29 +76,40 @@ func (c *FakeClusterProperties) Watch(ctx context.Context, opts v1.ListOptions) 
 }
 
 // Create takes the representation of a clusterProperty and creates it.  Returns the server's representation of the clusterProperty, and an error, if there is any.
-func (c *FakeClusterProperties) Create(ctx context.Context, clusterProperty *v1alpha1.ClusterProperty, opts v1.CreateOptions) (result *v1alpha1.ClusterProperty, err error) {
+func (c *FakeClusterProperties) Create(ctx context.Context, clusterProperty *v1beta1.ClusterProperty, opts v1.CreateOptions) (result *v1beta1.ClusterProperty, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewRootCreateAction(clusterpropertiesResource, clusterProperty), &v1alpha1.ClusterProperty{})
+		Invokes(testing.NewRootCreateAction(clusterpropertiesResource, clusterProperty), &v1beta1.ClusterProperty{})
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.ClusterProperty), err
+	return obj.(*v1beta1.ClusterProperty), err
 }
 
 // Update takes the representation of a clusterProperty and updates it. Returns the server's representation of the clusterProperty, and an error, if there is any.
-func (c *FakeClusterProperties) Update(ctx context.Context, clusterProperty *v1alpha1.ClusterProperty, opts v1.UpdateOptions) (result *v1alpha1.ClusterProperty, err error) {
+func (c *FakeClusterProperties) Update(ctx context.Context, clusterProperty *v1beta1.ClusterProperty, opts v1.UpdateOptions) (result *v1beta1.ClusterProperty, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewRootUpdateAction(clusterpropertiesResource, clusterProperty), &v1alpha1.ClusterProperty{})
+		Invokes(testing.NewRootUpdateAction(clusterpropertiesResource, clusterProperty), &v1beta1.ClusterProperty{})
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.ClusterProperty), err
+	return obj.(*v1beta1.ClusterProperty), err
+}
+
+// UpdateStatus was generated because the type contains a Status member.
+// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+func (c *FakeClusterProperties) UpdateStatus(ctx context.Context, clusterProperty *v1beta1.ClusterProperty, opts v1.UpdateOptions) (*v1beta1.ClusterProperty, error) {
+	obj, err := c.Fake.
+		Invokes(testing.NewRootUpdateSubresourceAction(clusterpropertiesResource, "status", clusterProperty), &v1beta1.ClusterProperty{})
+	if obj == nil {
+		return nil, err
+	}
+	return obj.(*v1beta1.ClusterProperty), err
 }
 
 // Delete takes name of the clusterProperty and deletes it. Returns an error if one occurs.
 func (c *FakeClusterProperties) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewRootDeleteActionWithOptions(clusterpropertiesResource, name, opts), &v1alpha1.ClusterProperty{})
+		Invokes(testing.NewRootDeleteActionWithOptions(clusterpropertiesResource, name, opts), &v1beta1.ClusterProperty{})
 	return err
 }
 
@@ -107,16 +117,16 @@ func (c *FakeClusterProperties) Delete(ctx context.Context, name string, opts v1
 func (c *FakeClusterProperties) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
 	action := testing.NewRootDeleteCollectionAction(clusterpropertiesResource, listOpts)
 
-	_, err := c.Fake.Invokes(action, &v1alpha1.ClusterPropertyList{})
+	_, err := c.Fake.Invokes(action, &v1beta1.ClusterPropertyList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched clusterProperty.
-func (c *FakeClusterProperties) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ClusterProperty, err error) {
+func (c *FakeClusterProperties) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1beta1.ClusterProperty, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewRootPatchSubresourceAction(clusterpropertiesResource, name, pt, data, subresources...), &v1alpha1.ClusterProperty{})
+		Invokes(testing.NewRootPatchSubresourceAction(clusterpropertiesResource, name, pt, data, subresources...), &v1beta1.ClusterProperty{})
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*v1alpha1.ClusterProperty), err
+	return obj.(*v1beta1.ClusterProperty), err
 }

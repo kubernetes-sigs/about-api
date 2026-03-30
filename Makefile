@@ -57,14 +57,11 @@ help: ## Display this help.
 ##@ Development
 
 .PHONY: manifests
-manifests: controller-gen ## Generate WebhookConfiguration, ClusterRole and CustomResourceDefinition objects.\
- 	v1beta1 uses controller runtime pattern and v1alpha1 uses kubernetes code generator pattern.
-	$(CONTROLLER_GEN) rbac:roleName=manager-role crd webhook paths="./api/v1beta1" output:crd:artifacts:config=config/crd/bases 
+manifests: ## Generate WebhookConfiguration, ClusterRole and CustomResourceDefinition objects.
 	./hack/update-crdgen.sh 
 
 .PHONY: generate
-generate: controller-gen ## Generate code containing DeepCopy, DeepCopyInto, and DeepCopyObject method implementations.
-	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate/boilerplate.generatego.txt" paths="./api/v1beta1"
+generate: ## Generate code containing DeepCopy, DeepCopyInto, and DeepCopyObject method implementations.
 	./hack/update-codegen.sh 
 
 .PHONY: fmt
@@ -119,11 +116,6 @@ deploy: manifests kustomize ## Deploy controller to the K8s cluster specified in
 .PHONY: undeploy
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config. Call with ignore-not-found=true to ignore resource not found errors during deletion.
 	$(KUSTOMIZE) build config/default | kubectl delete --ignore-not-found=$(ignore-not-found) -f -
-
-CONTROLLER_GEN = $(shell pwd)/bin/controller-gen
-.PHONY: controller-gen
-controller-gen: ## Download controller-gen locally if necessary.
-	$(call go-get-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0.16.2)
 
 KUSTOMIZE = $(shell pwd)/bin/kustomize
 .PHONY: kustomize
