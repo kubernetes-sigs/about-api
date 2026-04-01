@@ -8,56 +8,22 @@ set -o pipefail
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "${REPO_ROOT}"
 
-GO111MODULE=on go install "k8s.io/code-generator/cmd/register-gen@v0.29.1"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/client-gen@v0.29.1"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/lister-gen@v0.29.1"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/informer-gen@v0.29.1"
+CODEGEN_PKG=${CODEGEN_PKG:-$(go -C tools mod download -json k8s.io/code-generator | jq -r .Dir)}
 
-# echo "Generating deep copy files with deepcopy-gen"
-deepcopy-gen \
-  -O zz_generated.deepcopy \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --output-base "${REPO_ROOT}" \
-  --output-package "sigs.k8s.io/about-api/" \
-  --input-dirs sigs.k8s.io/about-api/api/v1alpha1 \
-  --input-dirs sigs.k8s.io/about-api/api/v1beta1 \
-  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/"
+. "${CODEGEN_PKG}/kube_codegen.sh"
 
-echo "Generating register files with register-gen"
-register-gen \
-  -O zz_generated.register \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --output-base "${REPO_ROOT}" \
-  --output-package "sigs.k8s.io/about-api/" \
-  --input-dirs sigs.k8s.io/about-api/api/v1alpha1 \
-  --input-dirs sigs.k8s.io/about-api/api/v1beta1 \
-  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/"
+kube::codegen::gen_helpers \
+  --boilerplate hack/boilerplate/boilerplate.generatego.txt \
+  .
 
-echo "Generating versioned clientsets with client-gen"
-client-gen \
-  --go-header-file "hack/boilerplate/boilerplate.generatego.txt" \
-  --clientset-name "versioned" \
-  --input-base "sigs.k8s.io/about-api/" \
-  --input "api/v1alpha1/,api/v1beta1/" \
-  --output-base "${REPO_ROOT}" \
-  --output-package "sigs.k8s.io/about-api/pkg/generated/clientset/" \
-  --input-dirs sigs.k8s.io/about-api/api/v1alpha1,sigs.k8s.io/about-api/api/v1beta1 \
-  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/"
+kube::codegen::gen_register \
+  --boilerplate hack/boilerplate/boilerplate.generatego.txt \
+  .
 
-echo "Generating listers with lister-gen"
-lister-gen \
-  --go-header-file "hack/boilerplate/boilerplate.generatego.txt" \
-  --output-base "${REPO_ROOT}" \
-  --output-package "sigs.k8s.io/about-api/pkg/generated/listers/" \
-  --input-dirs sigs.k8s.io/about-api/api/v1alpha1,sigs.k8s.io/about-api/api/v1beta1 \
-  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/"
-
-echo "Generating informers with informer-gen"
-informer-gen \
-  --go-header-file "hack/boilerplate/boilerplate.generatego.txt" \
-  --output-base "${REPO_ROOT}" \
-  --output-package "sigs.k8s.io/about-api/pkg/generated/informers/" \
-  --input-dirs sigs.k8s.io/about-api/api/v1alpha1,sigs.k8s.io/about-api/api/v1beta1 \
-  --trim-path-prefix "${REPO_ROOT}/sigs.k8s.io/about-api/" \
-  --versioned-clientset-package sigs.k8s.io/about-api/pkg/generated/clientset/versioned \
-  --listers-package sigs.k8s.io/about-api/pkg/generated/listers
+kube::codegen::gen_client \
+  --output-dir pkg/generated \
+  --output-pkg sigs.k8s.io/about-api/pkg/generated \
+  --boilerplate hack/boilerplate/boilerplate.generatego.txt \
+  --with-watch \
+  --with-applyconfig \
+  .
