@@ -19,37 +19,37 @@ limitations under the License.
 package versioned
 
 import (
-	"fmt"
-	"net/http"
+	fmt "fmt"
+	http "net/http"
 
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
-	aboutinternalversion "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/v1alpha1/internalversion"
-	aboutinternalversion "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/v1beta1/internalversion"
+	aboutv1alpha1 "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/api/v1alpha1"
+	aboutv1beta1 "sigs.k8s.io/about-api/pkg/generated/clientset/versioned/typed/api/v1beta1"
 )
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	About() aboutinternalversion.AboutInterface
-	About() aboutinternalversion.AboutInterface
+	AboutV1alpha1() aboutv1alpha1.AboutV1alpha1Interface
+	AboutV1beta1() aboutv1beta1.AboutV1beta1Interface
 }
 
 // Clientset contains the clients for groups.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	about *aboutinternalversion.AboutClient
-	about *aboutinternalversion.AboutClient
+	aboutV1alpha1 *aboutv1alpha1.AboutV1alpha1Client
+	aboutV1beta1  *aboutv1beta1.AboutV1beta1Client
 }
 
-// About retrieves the AboutClient
-func (c *Clientset) About() aboutinternalversion.AboutInterface {
-	return c.about
+// AboutV1alpha1 retrieves the AboutV1alpha1Client
+func (c *Clientset) AboutV1alpha1() aboutv1alpha1.AboutV1alpha1Interface {
+	return c.aboutV1alpha1
 }
 
-// About retrieves the AboutClient
-func (c *Clientset) About() aboutinternalversion.AboutInterface {
-	return c.about
+// AboutV1beta1 retrieves the AboutV1beta1Client
+func (c *Clientset) AboutV1beta1() aboutv1beta1.AboutV1beta1Interface {
+	return c.aboutV1beta1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -96,11 +96,11 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 
 	var cs Clientset
 	var err error
-	cs.about, err = aboutinternalversion.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.aboutV1alpha1, err = aboutv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
-	cs.about, err = aboutinternalversion.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.aboutV1beta1, err = aboutv1beta1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
@@ -125,8 +125,8 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.about = aboutinternalversion.New(c)
-	cs.about = aboutinternalversion.New(c)
+	cs.aboutV1alpha1 = aboutv1alpha1.New(c)
+	cs.aboutV1beta1 = aboutv1beta1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs
