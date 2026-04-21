@@ -24,7 +24,8 @@ import (
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	aboutv1alpha1 "sigs.k8s.io/about-api/pkg/apis/v1alpha1"
+	aboutv1alpha1 "sigs.k8s.io/about-api/api/v1alpha1"
+	aboutv1beta1 "sigs.k8s.io/about-api/api/v1beta1"
 )
 
 var Scheme = runtime.NewScheme()
@@ -32,6 +33,7 @@ var Codecs = serializer.NewCodecFactory(Scheme)
 var ParameterCodec = runtime.NewParameterCodec(Scheme)
 var localSchemeBuilder = runtime.SchemeBuilder{
 	aboutv1alpha1.AddToScheme,
+	aboutv1beta1.AddToScheme,
 }
 
 // AddToScheme adds all types of this clientset into the given scheme. This allows composition

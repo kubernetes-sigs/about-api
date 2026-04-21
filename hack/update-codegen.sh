@@ -8,44 +8,22 @@ set -o pipefail
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "${REPO_ROOT}"
 
-GO111MODULE=on go install "sigs.k8s.io/controller-tools/cmd/controller-gen@v0.8.0"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/register-gen"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/client-gen"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/lister-gen"
-GO111MODULE=on go install "k8s.io/code-generator/cmd/informer-gen"
+CODEGEN_PKG=${CODEGEN_PKG:-$(go -C tools mod download -json k8s.io/code-generator | jq -r .Dir)}
 
-# set GOPATH environment variables for commands(register-gen,client-gen,lister-gen,informer-gen).
-# Otherwise the generated files will be output to './' if $GOPATH is not set.
-export GOPATH=$(go env GOPATH | awk -F ':' '{print $1}')
+. "${CODEGEN_PKG}/kube_codegen.sh"
 
-echo "Generating deep copy files with controller-gen"
-controller-gen object:headerFile="hack/boilerplate/boilerplate.generatego.txt" paths="./pkg/apis/v1alpha1/..."
+kube::codegen::gen_helpers \
+  --boilerplate hack/boilerplate/boilerplate.generatego.txt \
+  .
 
-echo "Generating with register-gen"
-register-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-dirs=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --output-package=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --output-file-base=zz_generated.register
+kube::codegen::gen_register \
+  --boilerplate hack/boilerplate/boilerplate.generatego.txt \
+  .
 
-echo "Generating with client-gen"
-client-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-base="" \
-  --input=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --output-package=sigs.k8s.io/about-api/pkg/generated/clientset \
-  --clientset-name=versioned
-
-echo "Generating with lister-gen"
-lister-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-dirs=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --output-package=sigs.k8s.io/about-api/pkg/generated/listers
-
-echo "Generating with informer-gen"
-informer-gen \
-  --go-header-file hack/boilerplate/boilerplate.generatego.txt \
-  --input-dirs=sigs.k8s.io/about-api/pkg/apis/v1alpha1 \
-  --versioned-clientset-package=sigs.k8s.io/about-api/pkg/generated/clientset/versioned \
-  --listers-package=sigs.k8s.io/about-api/pkg/generated/listers \
-  --output-package=sigs.k8s.io/about-api/pkg/generated/informers
+kube::codegen::gen_client \
+  --output-dir pkg/generated \
+  --output-pkg sigs.k8s.io/about-api/pkg/generated \
+  --boilerplate hack/boilerplate/boilerplate.generatego.txt \
+  --with-watch \
+  --with-applyconfig \
+  .
