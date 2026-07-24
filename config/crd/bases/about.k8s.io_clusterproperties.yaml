@@ -8,6 +8,8 @@ metadata:
 spec:
   group: about.k8s.io
   names:
+    categories:
+    - multicluster
     kind: ClusterProperty
     listKind: ClusterPropertyList
     plural: clusterproperties
