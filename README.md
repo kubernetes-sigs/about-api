@@ -21,10 +21,6 @@ Install the ClusterProperty CRD into the cluster specified in `~/.kube/config`:
 
     make install
 
-or apply the manifest directly:
-
-    kubectl apply -f config/crd/bases/about.k8s.io_clusterproperties.yaml
-
 ### Run tests.
 
     make test
