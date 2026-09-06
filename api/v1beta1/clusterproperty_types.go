@@ -29,7 +29,7 @@ type ClusterPropertySpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// ClusterProperty value
-	// +kubebuilder:validation:Maxlength=128000
+	// +kubebuilder:validation:MaxLength=128000
 	// +kubebuilder:validation:MinLength=1
 	Value string `json:"value"`
 }

@@ -53,6 +53,7 @@ spec:
             properties:
               value:
                 description: ClusterProperty value
+                maxLength: 128000
                 minLength: 1
                 type: string
             required:
@@ -103,6 +104,7 @@ spec:
             properties:
               value:
                 description: ClusterProperty value
+                maxLength: 128000
                 minLength: 1
                 type: string
             required:
