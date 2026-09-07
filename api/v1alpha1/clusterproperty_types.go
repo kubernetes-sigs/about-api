@@ -43,7 +43,7 @@ type ClusterPropertyStatus struct {
 //+kubebuilder:subresource:status
 //+kubebuilder:resource:scope=Cluster,categories=multicluster
 
-// ClusterProperty is a resource provides a way to store identification related,
+// ClusterProperty is a resource that provides a way to store identification related,
 // cluster scoped information for multi-cluster tools while creating flexibility
 // for implementations.
 // +kubebuilder:printcolumn:name="value",type=string,JSONPath=`.spec.value`
