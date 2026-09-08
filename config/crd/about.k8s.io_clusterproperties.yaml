@@ -27,7 +27,7 @@ spec:
     schema:
       openAPIV3Schema:
         description: |-
-          ClusterProperty is a resource provides a way to store identification related,
+          ClusterProperty is a resource that provides a way to store identification related,
           cluster scoped information for multi-cluster tools while creating flexibility
           for implementations.
         properties:
@@ -77,7 +77,7 @@ spec:
     schema:
       openAPIV3Schema:
         description: |-
-          ClusterProperty is a resource provides a way to store identification related,
+          ClusterProperty is a resource that provides a way to store identification related,
           cluster scoped information for multi-cluster tools while creating flexibility
           for implementations.
         properties:
