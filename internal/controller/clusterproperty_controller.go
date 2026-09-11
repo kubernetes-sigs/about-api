@@ -37,7 +37,6 @@ type ClusterPropertyReconciler struct {
 // +kubebuilder:rbac:groups=about.k8s.io,resources=clusterproperties/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=about.k8s.io,resources=deployments,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=about.k8s.io,resources=services,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=about.k8s.io,resources=deployments,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=api.autoscaling.v2beta1,resources=hpa,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=about.k8s.io,resources=clusterproperties/finalizers,verbs=update
 
