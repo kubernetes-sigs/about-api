@@ -42,7 +42,7 @@ type ClusterPropertyReconciler struct {
 //+kubebuilder:rbac:groups=about.k8s.io,resources=clusterproperties/finalizers,verbs=update
 
 func (r *ClusterPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	logger := log.FromContext(ctx)
 
 	var clusterProperty aboutv1beta1.ClusterProperty
 
@@ -50,7 +50,7 @@ func (r *ClusterPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	// Reconcilitation watch the CR with name specifically "id.k8s.io"
 
 	if err := r.Get(ctx, req.NamespacedName, &clusterProperty); err != nil {
-		log.Log.Error(err, "Unable to fetch the required clusterProperty")
+		logger.Error(err, "Unable to fetch the required clusterProperty")
 		// we will ignore the not found errors, since they cannot be fixed by an immediate
 		// requeue( we'll need to wait for a new notification), and we can get them
 		// on deleted requests.
